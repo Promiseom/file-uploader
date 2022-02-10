@@ -1,6 +1,20 @@
 <?php 
     session_start();
     require_once("upload.php");
+
+    function completeFileUpload($inputName, $tmpFilename, $originalFilename){
+        switch($inputName){
+            case "profilePicture":
+                $newName = "profile_pictures/";
+            break;
+            case "lectureMaterial":
+                $newName = "lesson_materials/";
+            break;
+        }
+        $newName .= $originalFilename;
+        //rename file to new name
+        return rename($tmpFilename, $newName);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +24,7 @@
         <title>Simple File Uploader</title>
         <script src='script.js'> </script>
         <style>
-            @import url(styles.css)
+            @import url(styles.css);
         </style>
     </head>
     <body>

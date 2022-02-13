@@ -4,7 +4,7 @@ var numBytesUploaded = 0;           // this is the bytelength that has been succ
 var destination = location.href;    // upload server endpoint
 var fileBytesArray = null;          // ArrayBuffer containing binary data of file to be uploaded
 var fileid = null;
-var isUploadStarted = false;
+var isUploading = false;
 
 // A name to identify this upload just as names are used to identify
 // file inputs in a form. The name can be used by the server to identify this upload
@@ -125,9 +125,8 @@ function onNetworkFailure(){
     progressValue.innerText = "Network Error!"
     progressValue.style.color = "red";
     retryBtn.style.display = "initial";
-    clearTimeout(animeRef);
-    animeRef = null;
-    isUploadStarted = false;
+    isUploading = false;
+    updateProgressBar();
 }
 
 // Function is calld when user attempts to continue file upload after failure
@@ -145,11 +144,10 @@ function cancelFileUpload(){
     uploadButtons.style.display = "initial";
     progressBar.style.display = "none";
     retryBtn.style.display = "none";
-    clearTimeout(animeRef);
-    animeRef = null;
     numBytesUploaded = 0;
     uploadProgress.value = numBytesUploaded;
-    console.log("Upload cancelled");    
+    console.log("Upload cancelled");
+    isUploading = false;
 }
 
 // uploads file to the server using ajax (handles the network transaction and upload protocol)
@@ -164,21 +162,25 @@ function uploadFile(){
                 console.log("Server response: " + ajax.response);
             }else{
                 console.log("Upload of data segment failed")
+                onNetworkFailure();
             }
         }
     }
-    // split the bytes into requestLimit
-    while(numBytesUploaded < file.size){  
-        updateProgressBar();      
+    updateProgressBar();
+    var id = setInterval(function(){        
+        if(!isUploading || numBytesUploaded == file.size){ 
+            clearInterval(id);
+            console.log("Done");
+            isUploading = false;
+            return;
+        }        
         var data = fileBytesArray.slice(numBytesUploaded, numBytesUploaded + requestLimit);
         // convert to normal array to avoid increase in the size of data after stringification
         //data = Array.from(data);
-        sendData(ajax, data)
-        numBytesUploaded += data.length        
-    }
-    updateProgressBar();
-    console.log("Upload complete");
-    //ajax.send("fid=" + encodeURIComponent(fileid) + "&fileSize=" + encodeURIComponent(file.size) + "&data=" + encodeURIComponent(data));
+        sendData(ajax, data);
+        numBytesUploaded += data.length;
+        updateProgressBar();
+    }, 500);
 }
 
 function sendData(request, bytesData){
@@ -202,7 +204,6 @@ function pingServer(){
             if(ajax.status == 200){
                 var response = ajax.responseText;
                 console.log(response);
-                console.log(typeof(response));
                 response = JSON.parse(response)
                 if(response.newFile){
                 }else{
@@ -210,7 +211,7 @@ function pingServer(){
                     numBytesUploaded = response.fileSize;
                 }
                 uploadFile();
-                isUploadStarted = true;
+                isUploading = true;
             }else{
                 // should retry sending data 2 more times before reporting network error
                 onNetworkFailure();
@@ -231,13 +232,13 @@ function requestUploadCancelation(){
         if(ajax.readyState == 4){
             if(ajax.status == 200){
                 alert(ajax.responseText);
+                cancelFileUpload();
             }else{
                 alert("Failed to inform server of upload cancellation");
-            }
-            cancelFileUpload();
+            }            
         }
     }
     ajax.open("POST", destination, true);
     ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    ajax.send("cancel-upload=true");
+    ajax.send("cancel-upload=true&file=" + encodeURIComponent(fileid));
 }

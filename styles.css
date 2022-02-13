@@ -1,12 +1,16 @@
-body { 
-    font-family: sans-serif; 
+body {
     margin: 0px;
 }
 
-#uploader-container { 
+#uploader-container {
+    font-family: sans-serif;
     display: flex; 
     height: 100vh; 
-    width: 100%; 
+    width: 100%;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.75);
 }
 #uploader-frame { 
     box-shadow: 1px 3px 10px grey; 
@@ -16,6 +20,8 @@ body {
     min-width: 350px;
     margin: auto; 
     display: flex;
+    background: white;
+    border-radius: 10px;
 }
 
 #uploader-section1 {
@@ -52,6 +58,7 @@ body {
 }
 
 #upload-buttons{
+
 }
 
 #progress-bar{

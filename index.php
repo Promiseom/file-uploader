@@ -2,18 +2,19 @@
     session_start();
     require_once("upload.php");
 
+    // This function is required for renaming the uploaded file to destination
     function completeFileUpload($inputName, $tmpFilename, $originalFilename){
         switch($inputName){
             case "profilePicture":
-                $newName = "profile_pictures/";
+                $destination = "profile_pictures/";
             break;
             case "lectureMaterial":
-                $newName = "lesson_materials/";
+                $destination = "lesson_materials/";
             break;
         }
-        $newName .= $originalFilename;
+        $destination .= $originalFilename;
         //rename file to new name
-        return rename($tmpFilename, $newName);
+        return rename($tmpFilename, $destination);
     }
 ?>
 
@@ -32,7 +33,7 @@
             <div id='uploader-frame'>
                 <div id='uploader-section1'>
                     <p class='section-title'>Choose file to Upload</p>
-                    <form id='myform'><input type="file" name='file' onchange='onFileSelection()'/></form>
+                    <form id='myform'><input type='file' name='file' onchange='onFileSelection()'/></form>
                     <button onclick='openFileSelector()'>Choose File</button>
                 </div>
 
@@ -53,6 +54,7 @@
                     </div>         
                 </div>
             </div>
+
         </div>
     </body>
 </html>

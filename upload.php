@@ -19,10 +19,12 @@
                 $file = fopen("tmp/$tempFilename", "ab");
                 fclose($file);
             }
-            print_r(json_encode($responseData));
+            print_r(json_encode($responseData));        // mandatory server response
             die();
-        }else if(isset($_POST['cancel-upload'])){
-            print_r("upload cancelled");
+        }else if(isset($_POST['cancel-upload']) && isset($_POST["file"])){
+            $file = $_POST["file"];
+            unlink("tmp/".getTempFilename($file));
+            print_r("cancelled");
             die();
         }else if(isset($_POST["filedata"]) && isset($_POST["binData"])){
             $fileMetadata = json_decode($_POST["filedata"]);

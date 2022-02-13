@@ -1,0 +1,112 @@
+body {
+    margin: 0px;
+}
+
+#uploader-container {
+    font-family: sans-serif;
+    display: flex; 
+    height: 100vh; 
+    width: 100%;
+    position:absolute;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.75);
+}
+#uploader-frame { 
+    box-shadow: 1px 3px 10px grey; 
+    height: 80%; 
+    width: 80%; 
+    min-height:450px;
+    min-width: 350px;
+    margin: auto; 
+    display: flex;
+    background: white;
+    border-radius: 10px;
+}
+
+#uploader-section1 {
+    margin: auto;
+    text-align: center;
+}
+
+.section-title { 
+    text-align: center;
+    margin-top: 0px;
+    margin-bottom: 30px; 
+    font-size: 16pt;
+}
+
+#uploader-section1 form { 
+    display: none; 
+}
+
+#uploader-section2 {
+    display: none;
+    margin: auto;
+    font-size: 11pt;
+    text-align: center;
+}
+#image { 
+    height: 200px; 
+    width: auto; 
+    max-width: 350px; 
+}
+#filename { 
+    text-align: center; 
+    margin-top: 5px; 
+    margin-bottom: 30px;
+}
+
+#upload-buttons{
+}
+
+#progress-bar{
+    display: none;
+}
+
+#progress-bar p {
+    margin-bottom: 0px;
+}
+#upload-progress {
+    height: 40px;
+    width: 300px;
+    margin: 5px 0px;
+    -webkit-appearance: none;
+}
+#upload-progress::-webkit-progress-bar{
+    background: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+#upload-progress::-webkit-progress-value{
+    background: blue;
+}
+
+#uploader-container button { 
+    background: #2DC8FC; 
+    color: white; 
+    border-radius: 5px;
+    height: 45px;
+    width: 150px;
+    border: none;
+    transition: background 0.5s;
+    cursor: pointer;
+    margin:5px;
+}
+
+#uploader-container button:hover { 
+    background: #95E3FD; 
+    transition: background 0.5s;
+}
+
+.red-btn{
+    background: red;
+}
+
+.red-btn:hover{
+    background: #FF8383;
+}
+
+#retry-btn{
+    display: none;
+}
